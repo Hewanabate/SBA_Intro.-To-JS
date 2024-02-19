@@ -47,7 +47,7 @@ const LearnerSubmissions = [
     assignment_id: 2,
     submission: {
       submitted_date: '2024-02-15',
-      score: 150,
+      score: 148,
     },
   },
   {
@@ -79,7 +79,7 @@ const LearnerSubmissions = [
     assignment_id: 3,
     submission: {
       submitted_date: '2024-02-27',
-      score: 140,
+      score: 340,
     },
   },
 ];
@@ -91,8 +91,6 @@ const studentsubmission = LearnerSubmissions.map((LearnerSubmissions) => ({
   submitted_date: LearnerSubmissions.submission.submitted_date,
   score: LearnerSubmissions.submission.score,
 }));
-//console.log(studentsubmission);
-
 // collect assignments due date and points
 const ass = AssignmentGroup.assignments.map((assignments) => ({
   assignment_id: assignments.assignment_id,
@@ -102,32 +100,86 @@ const ass = AssignmentGroup.assignments.map((assignments) => ({
 //console.log(ass);
 
 //  concatenate and flat the arrays
-const info = studentsubmission.concat(ass);
-allStudentInformation = info.flat();
+const allStudentInformation = studentsubmission.concat(ass).flat();
+
+//console.log(studentsubmission);
+
 //console.log(allStudentInformation);
 
 const scoreresult = [];
 const Point = [];
+const studentId = [];
 
+//collect student score and push (iterate)
 for (let i = 0; i < LearnerSubmissions.length; i++) {
   grade = allStudentInformation[i].score;
   scoreresult.push(grade);
-  
+
+  // collect points_ possible
   for (let i = 0; i < AssignmentGroup.assignments.length; i++) {
     pointpossible = AssignmentGroup.assignments[i].points_possible;
     Point.push(pointpossible);
-    
-  if (
+
+    // compare student id and calculate each assignment grade
+    if (
       LearnerSubmissions.assignment_id ===
       AssignmentGroup.assignments.assignment_id
     ) {
       let studentgrade = grade / pointpossible;
-      console.log(
-        `Id:${LearnerSubmissions.learner_id},:${AssignmentGroup.assignments.assignment_id},${studentgrade} `
-      );
+
+      //console.log(studentgrade);
+    }
+  }
+
+  const duedate = [];
+  const subdate = [];
+  const studentid = [];
+  // iterate and collect learner id
+  for (let i = 0; i < LearnerSubmissions.length; i++) {
+    const learnerid = allStudentInformation[i].learner_id;
+    studentid.push(learnerid);
+
+    //collect due-date
+    for (let i = 0; i < AssignmentGroup.assignments.length; i++) {
+      const ass_due_at = AssignmentGroup.assignments[i].due_at;
+      duedate.push(ass_due_at);
+
+      // collect submitted date
+      for (let i = 0; i < LearnerSubmissions.length; i++) {
+        const sub_date = allStudentInformation[i].submitted_date;
+        subdate.push(sub_date);
+
+        // compare if student_assingment_id is not same as assignment_id and check if points_possble is equal 0 if this condtion is true break the loop, if false compare the date and calculate grade
+
+        if (
+          LearnerSubmissions.assignment_id !==
+            AssignmentGroup.assignments.assignment_id &&
+          AssignmentGroup.assignments.points_possible === 0
+        ) {
+          break;
+        } else if (
+          LearnerSubmissions.assignment_id ===
+            AssignmentGroup.assignments.assignment_id &&
+          sub_date <= ass_due_at
+        ) {
+          let studentgrade = grade / pointpossible;
+
+          console.log(studentgrade);
+        } else if (
+          LearnerSubmissions.assignment_id ===
+            AssignmentGroup.assignments.assignment_id &&
+          sub_date > ass_due_at
+        ) {
+          let lategrade = ((grade / pointpossible) * 10) / 100;
+          console.log(` ${lategrade} late`);
+        } else {
+          console.log('');
+        }
+      }
     }
   }
 }
+
 //console.log(scoreresult);
 //console.log(Point);
 
