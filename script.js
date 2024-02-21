@@ -1,223 +1,134 @@
-// The provided course information.
-const CourseInfo = {
-  id: 451,
-  name: 'Introduction to JavaScript',
+//Provided data
+const courseInfo = {
+  id: 101,
+  name: "Introduction to Programming",
 };
 
-// The provided assignment group.
-const AssignmentGroup = {
-  id: 12345,
-  name: 'Fundamentals of JavaScript',
-  course_id: 451,
-  group_weight: 25,
-  assignments: [
-    {
-      assignment_id: 1,
-      name: 'Declare a Variable',
-      due_at: '2024-02-12',
-      points_possible: 50,
-    },
-    {
-      assignment_id: 2,
-      name: 'Write a Function',
-      due_at: '2024-02-17',
-      points_possible: 150,
-    },
-    {
-      assignment_id: 3,
-      name: 'Code the World',
-      due_at: '2024-02-25',
-      points_possible: 500,
-    },
-  ],
-};
-
-// The provided learner submission data.
-const LearnerSubmissions = [
+const assignmentGroup = [
   {
-    learner_id: 125,
-    assignment_id: 1,
-    submission: {
-      submitted_date: '2024-02-11',
-      score: 47,
-    },
-  },
-  {
-    learner_id: 125,
-    assignment_id: 2,
-    submission: {
-      submitted_date: '2024-02-15',
-      score: 148,
-    },
-  },
-  {
-    learner_id: 125,
-    assignment_id: 3,
-    submission: {
-      submitted_date: '2024-02-25',
-      score: 400,
-    },
-  },
-  {
-    learner_id: 132,
-    assignment_id: 1,
-    submission: {
-      submitted_date: '2024-02-10',
-      score: 39,
-    },
-  },
-  {
-    learner_id: 132,
-    assignment_id: 2,
-    submission: {
-      submitted_date: '2024-02-18',
-      score: 140,
-    },
-  },
-  {
-    learner_id: 132,
-    assignment_id: 3,
-    submission: {
-      submitted_date: '2024-02-27',
-      score: 340,
-    },
+    id: 201,
+    name: "Programming Assignments",
+    course_id: 101,
+    group_weight: 50,
+    assignments: [
+      {
+        id: 1,
+        name: "Assignment 1",
+        due_at: "2023-05-01",
+        points_possible: 50,
+      },
+      {
+        id: 2,
+        name: "Assignment 2",
+        due_at: "2023-05-02",
+        points_possible: 100,
+      },
+      {
+        id: 3,
+        name: "Assignment 3",
+        due_at: "2023-05-03",
+        points_possible: 100,
+      },
+    ],
   },
 ];
 
-// collect learner information
-const studentsubmission = LearnerSubmissions.map((LearnerSubmissions) => ({
-  learner_id: LearnerSubmissions.learner_id,
-  assignment_id: LearnerSubmissions.assignment_id,
-  submitted_date: LearnerSubmissions.submission.submitted_date,
-  score: LearnerSubmissions.submission.score,
-}));
-// collect assignments due date and points
-const ass = AssignmentGroup.assignments.map((assignments) => ({
-  assignment_id: assignments.assignment_id,
-  due_at: assignments.due_at,
-  points_possible: assignments.points_possible,
-}));
-//console.log(ass);
+const learnerSubmissions = [
+  {
+    learner_id: 120,
+    assignment_id:1,
+    submission: {
+      submitted_at: "2023-04-30",
+      score: 45,
+    },
+  },
+  {
+    learner_id: 121,
+    assignment_id:2,
+    submission: {
+      submitted_at: "2023-4-30",
+      score: 70,
+    },
+  },
+  {
+    learner_id: 122,
+    assignment_id: 3,
+    submission: {
+      submitted_at: "2023-4-30",
+      score: 80,
+    },
+  },
+];
+// validate assignment group 
+function isValidAssignmentGroup(courseInfo, assignmentGroup) {
+  return courseInfo.id === assignmentGroup.course_id;
+}
 
-//  concatenate and flat the arrays
-const allStudentInformation = studentsubmission.concat(ass).flat();
+//validate learner submition
+function isValidLearnerSubmission(submission, assignment) {
+  const score = submission.submission.score;
+  const pointsPossible = assignment.points_possible;
 
-//console.log(studentsubmission);
-
-//console.log(allStudentInformation);
-
-const scoreresult = [];
-const Point = [];
-const studentId = [];
-
-//collect student score and push (iterate)
-for (let i = 0; i < LearnerSubmissions.length; i++) {
-  grade = allStudentInformation[i].score;
-  scoreresult.push(grade);
-
-  // collect points_ possible
-  for (let i = 0; i < AssignmentGroup.assignments.length; i++) {
-    pointpossible = AssignmentGroup.assignments[i].points_possible;
-    Point.push(pointpossible);
-
-    // compare student id and calculate each assignment grade
-    if (
-      LearnerSubmissions.assignment_id ===
-      AssignmentGroup.assignments.assignment_id
-    ) {
-      let studentgrade = grade / pointpossible;
-
-      //console.log(studentgrade);
-    }
+  if (isNaN(score)||pointsPossible === 0 || typeof score !== "number" ) {
+    return false;
+  } else { 
+    return true;
   }
+}
 
-  const duedate = [];
-  const subdate = [];
-  const studentid = [];
-  // iterate and collect learner id
-  for (let i = 0; i < LearnerSubmissions.length; i++) {
-    const learnerid = allStudentInformation[i].learner_id;
-    studentid.push(learnerid);
+function getLearnerData(courseInfo, assignmentGroups, learnerSubmissions) {
+  try {
+    const results = [];
 
-    //collect due-date
-    for (let i = 0; i < AssignmentGroup.assignments.length; i++) {
-      const ass_due_at = AssignmentGroup.assignments[i].due_at;
-      duedate.push(ass_due_at);
-
-      // collect submitted date
-      for (let i = 0; i < LearnerSubmissions.length; i++) {
-        const sub_date = allStudentInformation[i].submitted_date;
-        subdate.push(sub_date);
-
-        // compare if student_assingment_id is not same as assignment_id and check if points_possble is equal 0 if this condtion is true break the loop, if false compare the date and calculate grade
-
-        if (
-          LearnerSubmissions.assignment_id !==
-            AssignmentGroup.assignments.assignment_id &&
-          AssignmentGroup.assignments.points_possible === 0
-        ) {
-          break;
-        } else if (
-          LearnerSubmissions.assignment_id ===
-            AssignmentGroup.assignments.assignment_id &&
-          sub_date <= ass_due_at
-        ) {
-          let studentgrade = grade / pointpossible;
-
-          console.log(studentgrade);
-        } else if (
-          LearnerSubmissions.assignment_id ===
-            AssignmentGroup.assignments.assignment_id &&
-          sub_date > ass_due_at
-        ) {
-          let lategrade = ((grade / pointpossible) * 10) / 100;
-          console.log(` ${lategrade} late`);
-        } else {
-          console.log('');
+    learnerSubmissions.forEach((submission) => {
+      assignmentGroups.forEach((group) => {
+        //validate assignment groups
+        if (group.course_id !== courseInfo.id) {
+          throw new Error("Course ID mismatch.");
         }
-      }
-    }
+
+        const assignment = group.assignments.find(
+          (a) => a.id === submission.assignment_id
+        );
+          
+        if (!assignment) return;
+        const dueDate = new Date(assignment.due_at);
+        if (new Date() < dueDate) return;
+
+        let totalScore =
+          (submission.submission.score / assignment.points_possible);
+        if (new Date(submission.submission.submitted_at) > dueDate) {
+          ((totalScore * 10)/100); // Deduct 10% for late submission
+        }
+
+        let learnerResult = results.find((r) => r.id === submission.learner_id);
+        if (!learnerResult) {
+          learnerResult = { id: submission.learner_id, avg: 0 };
+          results.push(learnerResult);
+        }
+
+        learnerResult[submission.assignment_id] = totalScore;
+      });
+    });
+
+    results.forEach((result) => {
+      let totalScore = 0,
+        totalWeight = 0;
+      assignmentGroups.forEach((group) => {
+        group.assignments.forEach((assignment) => {
+          if (assignment.id in result) {
+            totalScore += result[assignment.id] * group.group_weight;
+            totalWeight += group.group_weight;
+          }
+        });
+      });
+      result.avg = totalWeight > 0 ? totalScore / totalWeight : 0;
+    });
+
+    return results;
+  } catch (error) {
+    console.error(error);// Handle error 
   }
 }
 
-//console.log(scoreresult);
-//console.log(Point);
-
-/* function getLearnerData(course, AssignmentGroup, submissions) {
-  const results = [];
-
-  const example_result = [
-    {
-      id: 125,
-      avg: 0.985, // (47 + 150) / (50 + 150)
-      1: 0.94, // 47 / 50
-      2: 1.0, // 150 / 150
-    },
-    {
-      id: 132,
-      avg: 0.82, // (39 + 125) / (50 + 150)
-      1: 0.78, // 39 / 50
-      2: 0.833, // late: (140 - 15) / 150
-    },
-  ];
-
-  // Parse submission data.
-  console.log(`Submission Data:`, submissions );
-  // Check to see if the submission was late; if so, deduct 10% of the maximum possible points.
-  // Find existing data for this learner, if any.
-  // If the learner already has data, add the new score to the existing data.
-  // Calculate the average score for each learner and remove the extra data.
-
-  //==== PUT CODE HERE =====//
-  return results;
-}
-
-const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-
-console.log(result); */
-
-// deconstruct element from the array
-//console.log(allStudentInfo);
-/* CanvasGradient.foreach((allStudentInfo.submission))=> {
-  console.log(allStudentInfo.submission.score);
-}*/
+console.log(getLearnerData(courseInfo, assignmentGroup, learnerSubmissions));

@@ -1,0 +1,1 @@
+I used different resource and pretty much what I did was "Monkey see Monkey do". It was challanging, I learn a lot form it. I know where I stand need todo more exercise.
