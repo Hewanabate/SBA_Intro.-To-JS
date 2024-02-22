@@ -59,12 +59,10 @@ const learnerSubmissions = [
     },
   },
 ];
-// validate assignment group 
-function isValidAssignmentGroup(courseInfo, assignmentGroup) {
-  return courseInfo.id === assignmentGroup.course_id;
-}
 
-//validate learner submition
+
+
+//validate learner submition typeof 
 function isValidLearnerSubmission(submission, assignment) {
   const score = submission.submission.score;
   const pointsPossible = assignment.points_possible;
@@ -92,6 +90,8 @@ function getLearnerData(courseInfo, assignmentGroups, learnerSubmissions) {
         );
           
         if (!assignment) return;
+        if (!isValidLearnerSubmission(submission, assignment)) return;
+
         const dueDate = new Date(assignment.due_at);
         if (new Date() < dueDate) return;
 
