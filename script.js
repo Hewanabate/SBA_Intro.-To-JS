@@ -14,19 +14,19 @@ const assignmentGroup = [
       {
         id: 1,
         name: "Assignment 1",
-        due_at: "2023-05-01",
+        due_at: "2024-02-11",
         points_possible: 50,
       },
       {
         id: 2,
         name: "Assignment 2",
-        due_at: "2023-05-02",
+        due_at: "2024-02-17",
         points_possible: 100,
       },
       {
         id: 3,
         name: "Assignment 3",
-        due_at: "2023-05-03",
+        due_at: "2024-02-22",
         points_possible: 100,
       },
     ],
@@ -38,20 +38,20 @@ const learnerSubmissions = [
     learner_id: 120,
     assignment_id:1,
     submission: {
-      submitted_at: "2023-04-30",
+      submitted_at: "2024-02-12",
       score: 45,
     },
   },
   {
-    learner_id: 121,
+    learner_id: 120,
     assignment_id:2,
     submission: {
-      submitted_at: "2023-4-30",
+      submitted_at: "2024-02-16",
       score: 70,
     },
   },
   {
-    learner_id: 122,
+    learner_id: 222,
     assignment_id: 3,
     submission: {
       submitted_at: "2023-4-30",
@@ -81,14 +81,14 @@ function getLearnerData(courseInfo, assignmentGroups, learnerSubmissions) {
     const results = [];
 
     learnerSubmissions.forEach((submission) => {
-      assignmentGroups.forEach((group) => {
+      assignmentGroups.forEach((ass_group) => {
         //validate assignment groups
-        if (group.course_id !== courseInfo.id) {
+        if (ass_group.course_id !== courseInfo.id) {
           throw new Error("Course ID mismatch.");
         }
 
-        const assignment = group.assignments.find(
-          (a) => a.id === submission.assignment_id
+        const assignment = ass_group.assignments.find(
+          (ass_id) => ass_id.id === submission.assignment_id
         );
           
         if (!assignment) return;
@@ -98,10 +98,10 @@ function getLearnerData(courseInfo, assignmentGroups, learnerSubmissions) {
         let totalScore =
           (submission.submission.score / assignment.points_possible);
         if (new Date(submission.submission.submitted_at) > dueDate) {
-          ((totalScore * 10)/100); // Deduct 10% for late submission
+          totalScore -= totalScore * 0.1; // Deduct 10% for late submission
         }
 
-        let learnerResult = results.find((r) => r.id === submission.learner_id);
+        let learnerResult = results.find((reslt) => reslt.id === submission.learner_id);
         if (!learnerResult) {
           learnerResult = { id: submission.learner_id, avg: 0 };
           results.push(learnerResult);
